@@ -1,9 +1,10 @@
 ﻿using OWML.Common;
 using OWML.ModHelper;
+using UnityEngine;
 
-namespace ModTemplate
+namespace NoOPCbreakMod
 {
-    public class ModTemplate : ModBehaviour
+    public class NoOPCbreakMod : ModBehaviour
     {
         private void Awake()
         {
@@ -14,17 +15,15 @@ namespace ModTemplate
 
         private void Start()
         {
-            // Starting here, you'll have access to OWML's mod helper.
-            ModHelper.Console.WriteLine($"My mod {nameof(ModTemplate)} is loaded!", MessageType.Success);
+            ModHelper.Console.WriteLine($"No OPC Break Mod Loaded!");
 
-            // Example of accessing game code.
-            LoadManager.OnCompleteSceneLoad += (scene, loadScene) =>
-            {
-                if (loadScene != OWScene.SolarSystem) return;
-                var playerBody = FindObjectOfType<PlayerBody>();
-                ModHelper.Console.WriteLine($"Found player body, and it's called {playerBody.name}!",
-                    MessageType.Success);
-            };
+            ModHelper.HarmonyHelper.AddPrefix<OrbitalProbeLaunchController>("LaunchProbe", typeof(NoOPCbreakMod), nameof(NoOPCbreakMod.NoProbeLaunch));
+            
+        }
+
+        private static bool NoProbeLaunch()
+        {
+            return false;
         }
     }
 }
